@@ -1,0 +1,4 @@
+Django
+python-decouple
+psycopg2-binary
+Unipath==1.1

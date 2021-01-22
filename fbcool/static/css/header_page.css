@@ -1,0 +1,214 @@
+/* TEXT */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
+
+h1,h2,h3 {font-family: 'Roboto', sans-serif;}
+h4,h5 {font-family: 'Oxygen', sans-serif;}
+.logo a {font-family: 'Rancho', cursive, Arial, sans-serif;}
+
+html {font-size: 62.5%;max-width: 1920px;}
+
+h1,.logo a {font-size: 4rem;font-weight: 800;}
+h2 {font-size: 3.4rem;font-weight: 400;}
+h3 {font-size: 2.7rem;font-weight: 400;}
+h4,a {font-size: 2.2rem; font-weight: 400;text-decoration: none;}
+h5 {font-size: 1.8rem;font-weight: 400;}
+
+p {
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-align: justify;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* COULEURS */
+h1,a {color: #607D8B;}
+h3 {color: #8C695D;}
+.c-black {color: #0B0A0D;}
+.c-grey {color: #E5E5E5;}
+
+.bg-grey {background-color: #E5E5E5;}
+.bg-black {background-color: #0B0A0D;}
+.bg-1 {background-color: #D9AE96;}
+.bg-2 {background-color: #8C695D;}
+
+/* STRUCTURE */
+body {margin: 0; padding-top: 10vh;}
+body * {box-sizing: border-box;}
+
+/* CUSTOM */
+img {
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box
+}
+/* GRID */
+.grid {
+    padding: 0 8vw;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(auto, 1fr);/*Hauteur des lignes*/
+    grid-gap: 20px;
+    width: 100%;
+}
+
+
+/* HEADER */
+.header {
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    width: 100%;
+    border-bottom: solid 2px  rgba(229, 229, 229, 0.1) ;
+    position: fixed;
+    top: 0;
+    z-index: 2000;
+}
+
+.menu-item a {margin: 0 2%;}
+
+header a:hover {color: #D9AE96;}
+
+.logo {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.menu {
+    grid-row: 1;
+    grid-column: 4 / 10;
+    text-align: center;
+    align-self: center;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;    
+}
+
+.langueEN {
+    align-self: center;
+    grid-row: 1;
+    grid-column: 12;
+    color: #E5E5E5;
+}
+
+.english {text-align: right;}
+
+.navigationCheckbox {display: none;}
+
+@media screen and (max-width:619px) 
+{
+    /* HEADER */
+    .grid {
+        grid-template-columns: repeat(12, 1fr);
+        grid-gap: 10px;
+    }
+
+    .logo{
+        grid-row: 1 ;
+        grid-column: 2/5;
+    }
+
+    .langueEN {
+        grid-column: 6;
+    }
+    
+    /*BURGER*/
+    .navigationBtn {
+        grid-row: 1;
+        grid-column: 11;
+        text-align: center;
+        cursor: pointer;
+        z-index: 1500;
+    }
+
+    /* trait du milieu */
+    .navigationIcon {        
+        position: relative;
+        margin-top: 20px;
+        width: 50px;
+        height: 2px;
+        background: #E5E5E5;
+        display: inline-block;
+    }
+
+    /* deux autres traits */
+    .navigationIcon::before,.navigationIcon::after {
+        width: 50px;
+        height: 2px;
+        background-color: #E5E5E5;
+        content: '';
+        position: absolute;
+        left: 0;
+        transition: all 0.2s;
+    }
+
+    .navigationIcon::before {
+        top: -12.8px;
+    }
+
+    .navigationIcon::after {
+        top: 12.8px;
+    }
+
+    /* navigation et liste */
+    .menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: absolute;
+        z-index: 1400;
+        left: 0;
+        transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        opacity: 0;
+        width: 0;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-direction: column;
+        height: 50vh;
+        position: absolute;
+        width: 100vw;
+    }
+    
+
+    .liens {
+        display: inline-block;
+        font-size: 4.3rem;
+        font-weight: 400;
+        color: #E5E5E5;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    
+    /* les animations */    
+    .navigationCheckbox:checked ~ .navigationBg {
+        transform: scale(80);
+    }
+    
+    .navigationCheckbox:checked ~ .menu {
+        opacity: 1;
+        width: 100%;
+    }
+   
+    .navigationCheckbox:checked + .navigationBtn .navigationIcon {
+        background-color: transparent;
+    }
+    
+    .navigationCheckbox:checked + .navigationBtn .navigationIcon::before {
+        top: 0;
+        transform: rotate(135deg);
+    }
+    
+    .navigationCheckbox:checked + .navigationBtn .navigationIcon::after {
+        top: 0;
+        transform: rotate(-135deg);
+    }
+}
