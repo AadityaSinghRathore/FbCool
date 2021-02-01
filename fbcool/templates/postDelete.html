@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <h1>are you sure you want to Delete this Post?</h1>
+       <form action="" method="post" class="d-inline">
+          {% csrf_token  %}  
+          <input type="submit" class="btn btn-danger" value="Delete">
+          <a href="{% url 'post-List'   %}" type="submit">back</a>
+</form>
+</body>
+</html>
