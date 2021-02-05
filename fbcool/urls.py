@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.views.generic.base import TemplateView
-from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,HomeView,CommentCreateView
+from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,CommentCreateView,PostDetail,LikeView
 from django.conf.urls.static import static
+
 from django.conf import settings
 
 
@@ -25,15 +26,18 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', SignUpView.as_view(), name='signup'),
-    path('home/', HomeView.as_view(), name='home'),
+   # path('home/', HomeView.as_view(), name='home'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('postlist/',PostListView.as_view(),name= "post-List"),
+    path('postdetail/<int:pk>',PostDetail.as_view(),name= "post-Detail"),
+    
     path('postlist/postCreate/',PostCreateView.as_view(),name= "post-Create"),
 
     path('postDelete/<int:pk>',PostDeleteView.as_view(),name= "post-delete"),
     path('postUpdate/<int:pk>',PostUpdateView.as_view(),name= "post-update"),
     path('postlist/<int:pk>/commentCreate',CommentCreateView.as_view(),name= "post-comment"),
    
+   path('like/<int:pk>',LikeView,name='post-like'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

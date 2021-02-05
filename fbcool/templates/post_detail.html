@@ -1,0 +1,22 @@
+ <h3>{{post.author}}</h3>
+
+  <h2>{{post.title}}</h2>
+  <p>{{post.post_date}}</p>
+  <p >{{post.content|slice:""}}</p>
+  <p><img src="{{post.image.url}}"width="400" height="450"></p>
+  
+      <a href="{% url 'post-update' post.id  %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Edit" /></a>
+
+      <a href="{% url 'post-List'  %}">BAckHome</a>
+ <br/>
+     <form action="{% url 'post-like' post.pk %}" method="POST">
+       {% csrf_token %}
+       {% if liked %}
+            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm">Unlike</button>
+
+        {% else %}    
+            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">like</button>    
+
+        {% endif %}    
+        -{{ total_likes }} Likes
+     </form>

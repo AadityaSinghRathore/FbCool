@@ -11,7 +11,10 @@ class Post(models.Model):
     author =models.ForeignKey(User,on_delete=models.CASCADE)
     image = models.ImageField(verbose_name='Image',upload_to='images')
     post_date=models.DateField(auto_now_add=True)
-    
+    likes = models.ManyToManyField(User,related_name='blog_post')
+
+    def total_likes(self):
+        return self.likes.count()
 
     def get_absolute_url(self):
         return reverse('home') 
@@ -23,4 +26,14 @@ class Comment(models.Model):
     date_added=models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return "%s - %s" % (self.post.title,self.name)
+        return "%s - %s" % (self.post.title,self.name)  
+
+#class Likes(models.Model):
+
+ #   likes = models.ManyToManyField(User,related_name='blog_post')
+
+ #   def total_likes(self):
+  #      return self.likes.count()
+
+   # def liked_by(self): 
+    #     return ','.join([str(p) for p in slef.user.all()])    
