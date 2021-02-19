@@ -10,6 +10,18 @@ from django.http import HttpResponseRedirect
 from django.views.generic.edit import FormView 
 from . models import Post,Comment
 from django.views.generic.base import TemplateView
+from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+
+
+def validate_username(request):
+    
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(data)
 
 def LikeView(request,pk):
 
@@ -39,21 +51,41 @@ class SignUpView(generic.CreateView):
  #   success_url = '/postlist/' 
 
 
-class PostCreateView(CreateView):
-   
-    form_class = PostForm
+# class PostCreateView(CreateView):
     
-    template_name='Post.html'
+#     form_class = PostForm
+    
+#     model = Post
+    
+#     template_name='registration/newPost.html'
    
-    success_url='home.html'
+#     success_url='home.html'
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.save()
+    
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         form.save()
         
-        #return render(request, "home.html")
-       # return super(post-Create, self).form_valid(form)
-        return redirect('/postlist/')
+#         #return render(request, "home.html")
+#        # return super(post-Create, self).form_valid(form)
+#         return redirect('/postlist/')
+#     def post(self, request, *args, **kwargs):
+#          extra_context = {}
+#          form = self.form_class(request.POST,request.FILES)
+#          if form.is_valid():
+#              post = form.save(commit=False)
+#              post.author = self.request.user
+#              post.save()
+#              extra_context['form_is_valid'] = True
+#              object_list = self.model.objects.all()
+#              print(object_list)
+#              extra_context['html_admin_user_list'] = render_to_string('registration/home.html', {'post_list': object_list})
+#          else:
+#              context = {'form' : form}
+#              extra_context['form_is_valid'] = False
+#              extra_context['html_form'] = render_to_string('registration/newPost.html', context )
+#          return JsonResponse(extra_context)
+    
 
 class CommentCreateView(CreateView):
     model=Comment
@@ -121,3 +153,37 @@ class PostDetail(DetailView):
             context['total_likes']=total_likes
             context['liked'] = liked   
          return  context  
+
+
+
+
+
+class PostCreateView(CreateView):
+
+    model = Post
+    template_name = 'registration/newPost.html'
+    form_class = PostForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class()
+        return context
+
+    def post(self, request, *args, **kwargs):
+
+        extra_context = {}
+        form = self.form_class(request.POST,request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = self.request.user
+            post.save()
+            extra_context['form_is_valid'] = True
+            object_list = self.model.objects.all()
+           
+            extra_context['html_admin_user_list'] = render_to_string('include_post_list.html', {'post_list': object_list})
+            
+        else:
+            context = {'form' : form}
+            extra_context['form_is_valid'] = False
+            extra_context['html_form'] = render_to_string('registration/newPost.html', context )
+        return JsonResponse(extra_context)
+

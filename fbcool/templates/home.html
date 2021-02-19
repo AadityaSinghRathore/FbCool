@@ -12,57 +12,29 @@
     <p><a href="{% url 'logout' %}">Log Out</a></p>
    
 
+<a class="fa fa-pencil create-post-model-popup" data-toggle="modal" id="createpostlink" data-url="{% url 'post-Create' %}" data-target="#createpost" title="create_new_post" data-tooltip>Create Post yyy</a>
   
-      
-  {% for post in post_list|dictsortreversed:"id"|slice:"" %}
+                <div class="modal fade" id="createpost"  tabindex="-1" role="dialog" aria-labelledby="createpost"  aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered"  id="adminModelPopup" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <button type="button"class="close"data-dismiss="modal"aria-label="Close">
+                            </button>
+                        </div>
 
-<div style="word-wrap:break-word;background-color:#9e9e9e3b" class="col-lg-4 col-md-4 col-sm-4 container justify-content-center" >
-  <a href=" {% url 'post-Detail' post.id %}">Detail</a>
-  <h3>{{post.author}}</h3>
+                        <div class="modal-body available-items p-0">
+                        <div class="user-info-form p-4 admin-model-popup"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
 
-  <h2>{{post.title}}</h2>
-  <p>{{post.post_date}}</p>
-  <p >{{post.content|slice:""}}</p>
-  <p><img src="{{post.image.url}}"width="400" height="450"></p>
-  {% if user.id == post.author.id %}
-      <a href="{% url 'post-update' post.id  %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Edit" /></a>
-        <a href="{% url 'post-delete' post.id %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Delete" /></a>
+  <div class="container1">
+  {% include "include_post_list.html" %}
+</div>    
 
-
-  {% endif %}
-     <br/>
-     <form action="{% url 'post-like' post.pk %}" method="POST">
-       {% csrf_token %}
-       {% if liked %}
-            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm">Unlike</button>
-        {% else %}    
-            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">like</button>    
-        {% endif %}    
-              -{{ total_likes }} Likes
-     </form>
-
-
-      <h2>comment</h2> 
-  {% if not post.comments.all %}
-      no comments Yet<a href="{% url 'post-comment' post.pk  %}">ADD one</a>
-  {% else %}
-     <a href="{% url 'post-comment' post.pk  %}">ADD one</a> 
-     <br/><br/>
-      {% for comment in post.comments.all %}
-          <strong>
-            <br/>
-            {{comment.name}}-{{comment.date_added}}
-         </strong>
-         <br/>
-         {{comment.boady}}
-      {% endfor  %}  
-    
-  {% endif %}  
- 
-</div>
-<hr>
-  
-      {% endfor %}
      
   {% else %}
     <p>You are not logged in</p>
@@ -73,4 +45,35 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script type="text/javascript">
+        $(document).on("click", ".create-post-model-popup", function(e) {
+            e.preventDefault();
+            
+            url = $(this).data('url');
+            $.get(url, function(response) {
+                $(".admin-model-popup").html(response);
+
+            });
+        });
+        $("#adminModelPopup").on("submit", ".create_post_form", function() {
+            var form = $(this);
+            var data1 = new FormData($(".create_post_form").get(0));
+            $.ajax({
+                url: form.attr("action"),
+                data: data1, 
+                type: form.attr("method"),
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.form_is_valid) {
+                        $(".container1").html(data.html_admin_user_list);
+                    } else {
+                        $(".create_post_form").html(data.html_form);
+                    }
+                }
+            });
+            return false;
+        });
+    </script>
 {% endblock extra_js %}

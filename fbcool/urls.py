@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.views.generic.base import TemplateView
-from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,CommentCreateView,PostDetail,LikeView
+from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,CommentCreateView,PostDetail,LikeView ,validate_username
 from django.conf.urls.static import static
 
 from django.conf import settings
@@ -38,6 +38,7 @@ urlpatterns = [
     path('postlist/<int:pk>/commentCreate',CommentCreateView.as_view(),name= "post-comment"),
    
    path('like/<int:pk>',LikeView,name='post-like'),
+   path('ajax/validate_username', validate_username, name='validate_username'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

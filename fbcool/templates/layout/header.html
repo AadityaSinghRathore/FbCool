@@ -15,6 +15,8 @@
         <nav class="menu bg-black">
             <div class="menu-item">
                 <a href="#" class="liens">Profile</a>
+
+                <a class="fa fa-pencil create-post-model-popup" data-toggle="modal" id="createpostlink" data-url="{% url 'post-Create' %}" data-target="#createpost" title="create_new_post" data-tooltip>Create Post</a>
                 <a href="{% url 'post-Create' %}" class="liens">Create Post</a>
                 <a href="#" class="liens">Home</a>
                 <a href="#" class="liens">chat</a>
