@@ -1,0 +1,17 @@
+
+
+<!-- Modal body -->
+<div class="modal-body">
+  <form  method='post' class="form delete_post_form" role="form" enctype="multipart/form-data" action="{% url 'post-delete' pk=post.pk %}">
+
+      {% csrf_token %}
+          <h1>are you sure you want to Delete this Post?</h1>
+       
+
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="submit" class="post_submit_button" style="cursor: pointer;"  data-target="#createpost">yes</button>
+      <button type="button" class="cancel_button" data-dismiss="modal" style="cursor: pointer;">No</button>
+    </div>
+  </form>
+</div>

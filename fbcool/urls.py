@@ -35,7 +35,8 @@ urlpatterns = [
 
     path('postDelete/<int:pk>',PostDeleteView.as_view(),name= "post-delete"),
     path('postUpdate/<int:pk>',PostUpdateView.as_view(),name= "post-update"),
-    path('postlist/<int:pk>/commentCreate',CommentCreateView.as_view(),name= "post-comment"),
+    path('comment/create/', CommentCreateView.as_view(),name= "post-comment"),
+    #path('postlist/<int:pk>/addcomment/', CommentCreateView.as_view(), name='post-comment'),
    
    path('like/<int:pk>',LikeView,name='post-like'),
    path('ajax/validate_username', validate_username, name='validate_username'),

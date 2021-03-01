@@ -5,7 +5,7 @@
   <p >{{post.content|slice:""}}</p>
   <p><img src="{{post.image.url}}"width="400" height="450"></p>
   
-      <a href="{% url 'post-update' post.id  %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Edit" /></a>
+      <input type="button" value="Edit" class="fa fa-pencil delete-post-model-popup" data-toggle="modal" data-url="{% url 'post-update' post.id %}"  data-target="#createpost"  style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm">
 
       <a href="{% url 'post-List'  %}">BAckHome</a>
  <br/>

@@ -1,50 +1,45 @@
-
-  {% for post in post_list|dictsortreversed:"id"|slice:"" %}
-
-<div style="word-wrap:break-word;background-color:#9e9e9e3b" class="col-lg-4 col-md-4 col-sm-4 container justify-content-center" >
-  <a href=" {% url 'post-Detail' post.id %}">Detail</a>
-  <h3>{{post.author}}</h3>
-
-  <h2>{{post.title}}</h2>
-  <p>{{post.post_date}}</p>
-  <p >{{post.content|slice:""}}</p>
-  <p><img src="{{post.image.url}}"width="400" height="450"></p>
-  {% if user.id == post.author.id %}
-      <a href="{% url 'post-update' post.id  %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Edit" /></a>
-        <a href="{% url 'post-delete' post.id %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Delete" /></a>
-
-
-  {% endif %}
-     <br/>
-     <form action="{% url 'post-like' post.pk %}" method="POST">
-       {% csrf_token %}
-       {% if liked %}
-            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm">Unlike</button>
-        {% else %}    
-            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">like</button>    
-        {% endif %}    
-              -{{ total_likes }} Likes
-     </form>
-
-
-      <h2>comment</h2> 
-  {% if not post.comments.all %}
-      no comments Yet<a href="{% url 'post-comment' post.pk  %}">ADD one</a>
-  {% else %}
-     <a href="{% url 'post-comment' post.pk  %}">ADD one</a> 
-     <br/><br/>
-      {% for comment in post.comments.all %}
-          <strong>
-            <br/>
-            {{comment.name}}-{{comment.date_added}}
-         </strong>
-         <br/>
-         {{comment.boady}}
-      {% endfor  %}  
+{% for post in post_list|dictsortreversed:"id"|slice:"" %}
+    <div style="word-wrap:break-word;background-color:#9e9e9e3b" class="col-lg-4 col-md-4 col-sm-4 container justify-content-center" >
+        <input type="button" value="Detail" class="fa fa-pencil delete-post-model-popup" data-toggle="modal" data-url="{% url 'post-Detail' post.id %}"  data-target="#createpost"  style="background-color:lightgrey;border-color:blue" class="btn btn-warning btn-sm">
+        <h3>{{post.author}}</h3>
+        <h2>{{post.title}}</h2>
+        <p>{{post.post_date}}</p>
+        <p >{{post.content|slice:""}}</p>
+        <p><img src="{{post.image.url}}"width="400" height="450"></p>
+        {% if user.id == post.author.id %}
+            <a href="{% url 'post-update' post.id  %}" style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm"><input type="button" value="Edit" /></a>
+            <input type="button" value="Edit" class="fa fa-pencil delete-post-model-popup" data-toggle="modal" data-url="{% url 'post-update' post.id %}"  data-target="#createpost"  style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm">
+            <input type="button" value="Delete" class="fa fa-pencil delete-post-model-popup" data-toggle="modal" data-url="{% url 'post-delete' post.id %}"  data-target="#createpost"  style="background-color:lightgrey;border-color:lightgrey" class="btn btn-warning btn-sm">
+            
+        {% endif %}
+        <br/>
+        <form action="{% url 'post-like' post.pk %}" method="POST">
+            {% csrf_token %}
+            {% if liked %}
+                <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm">Unlike</button>
+            {% else %}
+                <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">like</button>
+            {% endif %}
+            -{{ total_likes }} Likes
+        </form>
+        <h2>comment</h2>
+        {% if not post.comments.all %}
+            no comments Yet<a class="fa fa-pencil comment-post-model-popup" data-url="{% url 'post-comment'  %}?post_id={{post.id}}" data-id="{{post.pk}}" data-toggle="modal" data-target="#createpost" >ADD one</a>
+        {% else %}
+            <a class="fa fa-pencil comment-post-model-popup" data-url="{% url 'post-comment' %}?post_id={{post.id}}" data-id="{{post.pk}}" data-toggle="modal" data-target="#createpost" >Comment</a>
+            <br/><br/>
+            {% for comment in post.comments.all %}
+                <strong>
+                <br/>
+                {{comment.name}}-{{comment.date_added}}
+                </strong>
+                <br/>
+                {{comment.boady}}
+            {% endfor  %}
+            
+        {% endif %}
+        
+    </div>
+    <hr>
     
-  {% endif %}  
- 
-</div>
-<hr>
-  
-      {% endfor %}
+{% endfor %}

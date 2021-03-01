@@ -1,16 +1,17 @@
-{% extends 'base.html' %}
+<div class="modal-body">
+    <form  method='post' class="form comment_post_form" role="form" enctype="multipart/form-data" action="{% url 'post-comment' %}" >
 
-{% block content %}
+        <h1>comment on Post</h1>
 
-   
-           <h1>comment on Post</h1>
-           
-        <form action=""  method='post' >
-            {% csrf_token %}
-            {{form.as_p}}
-
-             <input type="submit" value="Post">
-             <a href="{% url 'post-List'   %}" type="submit">back</a>
-        </form>
-   
-{% endblock  %}
+        {% csrf_token %}
+          {{form.as_p}}
+          
+         <input type="hidden" name="post_id" value="{{post_id}}">
+         <input type="submit" value="Post">
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="post_submit_button" style="cursor: pointer;"  data-target="#createpost">Submit</button>
+          <button type="button" class="cancel_button" data-dismiss="modal" style="cursor: pointer;">Cancel</button>
+        </div>
+    </form> 
+</div> 

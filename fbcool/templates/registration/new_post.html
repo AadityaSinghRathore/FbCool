@@ -1,0 +1,33 @@
+<!-- Modal body -->
+<div class="modal-body">
+    <form  method='post' class="form create_post_form" role="form" enctype="multipart/form-data" action="{% url 'post-Create' %}">
+        {% csrf_token %}
+        <h1>create post</h1>
+        <div class="form-group">
+            <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% for field in form %}
+            <div class="form-group">
+                {% if field.errors %}
+                    <ul class="form-errors">
+                        {% for error in field.errors %}
+                            <li><span class="fa fa-exclamation-triangle"></span> <strong>{{ error|escape }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {{ field.label_tag }} {{ field }}
+                {% if field.help_text %}<div class="form-helptext">{{ field.help_text }}</div>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <!-- Modal footer -->
+    <div class="modal-footer">
+        <button type="submit" class="post_submit_button" style="cursor: pointer;"  data-target="#createpost">Submit</button>
+        <a href="{% url 'post-List'   %}" type="submit">back</a>
+        <button type="button" class="cancel_button" data-dismiss="modal" style="cursor: pointer;">Cancel</button>
+    </div>
+</form>
+</div>

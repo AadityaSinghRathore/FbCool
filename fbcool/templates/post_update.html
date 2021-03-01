@@ -1,0 +1,29 @@
+<div class="modal-body">
+
+
+current user :{{user.id}}
+post author :{{post.author.id}}
+  {% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+        <h1>you can edit {{ user.username }}!</h1>
+           <h1>Edit Post</h1>
+           
+        <form action="{% url 'post-update' pk=post.pk %}"  method='post'class="form delete_post_form" enctype="multipart/form-data" >
+            {% csrf_token %}
+            {{form.as_p}}
+
+            <div class="modal-footer">
+                  <button type="submit" class="post_submit_button" style="cursor: pointer;"  data-target="#createpost">Post</button>
+                  
+                  <a href="{% url 'post-List'   %}" type="submit">back</a>
+                  
+            </div>
+        </form>
+    {% else %}
+    <p>You are not user get lost otherwise you will  get mudrus</p>
+        {% endif %}
+
+    {% endif %}
+      <!-- Modal footer -->
+
+</div>
