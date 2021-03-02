@@ -64,7 +64,7 @@ $(document).ready(function () {
         $("#adminModelPopup").on("submit", ".comment_post_form", function() {
             var form = $(this);
             var data1 = new FormData($(".comment_post_form").get(0));
-            debugger
+
             $.ajax({
                 url: $(this).attr("action"),
                 data: data1,  //form.serialize(),
@@ -74,9 +74,10 @@ $(document).ready(function () {
                 processData: false,
                 success: function(data) {
                     if (data.form_is_valid) {
-                         $('#createpost').modal('hide')
+                        $('#createpost').modal('hide')
                         $(".container1").html(data.html_admin_user_list);
                     } else {
+
                         $(".comment_post_form").html(data.html_form);
                     }
                 }

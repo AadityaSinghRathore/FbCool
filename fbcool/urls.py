@@ -28,13 +28,13 @@ urlpatterns = [
     path('', SignUpView.as_view(), name='signup'),
    # path('home/', HomeView.as_view(), name='home'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('postlist/',PostListView.as_view(),name= "post-List"),
-    path('postdetail/<int:pk>',PostDetail.as_view(),name= "post-Detail"),
+    path('post/list/',PostListView.as_view(),name= "post-List"),
+    path('post/detail/<int:pk>',PostDetail.as_view(),name= "post-Detail"),
     
-    path('postlist/postCreate/',PostCreateView.as_view(),name= "post-Create"),
+    path('post/list/post/Create/',PostCreateView.as_view(),name= "post-Create"),
 
-    path('postDelete/<int:pk>',PostDeleteView.as_view(),name= "post-delete"),
-    path('postUpdate/<int:pk>',PostUpdateView.as_view(),name= "post-update"),
+    path('post/delete/<int:pk>',PostDeleteView.as_view(),name= "post-delete"),
+    path('post/update/<int:pk>',PostUpdateView.as_view(),name= "post-update"),
     path('comment/create/', CommentCreateView.as_view(),name= "post-comment"),
     #path('postlist/<int:pk>/addcomment/', CommentCreateView.as_view(), name='post-comment'),
    

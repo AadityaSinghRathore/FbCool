@@ -14,7 +14,6 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
-
 def validate_username(request):
     
     username = request.GET.get('username', None)
@@ -78,9 +77,9 @@ class CommentCreateView(CreateView):
     form_class = CommentForm
     
     template_name='add_comment.html'
-    success_url='/postlist/'  
+    success_url='/post/list/'  
          
-
+    
     def get_context_data(self, **kwargs):
         """Insert the form into the context dict."""
         if 'form' not in kwargs:
@@ -97,33 +96,33 @@ class CommentCreateView(CreateView):
         data.post_id = self.request.POST['post_id']
         data.user = self.request.user
         data.save()
- #    form.save()
-#     return JsonResponse() 
-        #return super().form_valid(form)
+    
         extra_context['form_is_valid'] = True
         object_list = self.model.objects.all()
-        extra_context['html_admin_user_list'] = render_to_string('include_post_list.html', {'post_list': object_list})
-        return JsonResponse(extra_context)
-    
+        extra_context['html_admin_user_list'] = render_to_string('include_post_list.html', {'post_list': object_list}) 
+        return JsonResponse(extra_context,safe=False)
+        
       
        
     # def post(self, request, *args, **kwargs):
-    #     import pdb; pdb.set_trace()
-    #     extra_context = {}
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-            
-    #         form.instance.user = self.request.user
     
-    #         form.save()
-    #         extra_context['form_is_valid'] = True
-    #         object_list = self.model.objects.all()
-    #         extra_context['html_admin_user_list'] = render_to_string('include_post_list.html', {'post_list': object_list})
-    #     else:
-    #         context = {'form' : form}
-    #         extra_context['form_is_valid'] = False
-    #         extra_context['html_form'] = render_to_string('add_comment.html', context )
-    #     return JsonResponse(extra_context) 
+    #      extra_context = {}
+    #      form = self.form_class(request.POST)
+    #      if form.is_valid():
+            
+    #          form.instance.user = self.request.user
+    #          data = form.save(commit=False)
+    #          data.post_id = self.request.POST['post_id']
+    #          data.user = self.request.user
+    #          data.save()
+    #          extra_context['form_is_valid'] = True
+    #          object_list = self.model.objects.all()
+    #          extra_context['html_admin_user_list'] = render_to_string('include_post_list.html', {'post_list': object_list})
+    #      else:
+    #          context = {'form' : form}
+    #          extra_context['form_is_valid'] = False
+    #          extra_context['html_form'] = render_to_string('add_comment.html', context )
+    #      return JsonResponse(extra_context) 
 
 class PostListView(ListView):
     
@@ -136,20 +135,20 @@ class PostUpdateView(UpdateView):
     model=Post
     form_class=PostForm
     template_name="post_update.html"
-    success_url='/postlist/'
+    success_url='/post/list/'
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.save()
         
         #return render(request, "home.html")
         # return super(post-Create, self).form_valid(form)
-        return redirect('/postlist/')
+        return redirect('/post/list/')
 
 class PostDeleteView(DeleteView):
     model=Post
     template_name="post_delete.html"
     
-    success_url='/postlist/'        
+    success_url='/post/list/'        
     
     def form_valid(self, form):
 
@@ -158,7 +157,7 @@ class PostDeleteView(DeleteView):
         
         #return render(request, "home.html")
         # return super(post-Create, self).form_valid(form)
-        return redirect('/postlist/')   
+        return redirect('/post/list/')   
 
 class PostDetail(DetailView):
     model=Post
