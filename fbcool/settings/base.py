@@ -33,7 +33,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,7 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentication'
+    'authentication',
+    'rest_framework',
+    
+    'django.contrib.sites',
+    'corsheaders',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+
+
 ]
 
 MIDDLEWARE = [
@@ -56,6 +67,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'fbcool.urls'
@@ -71,10 +86,41 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+  
+    'django.contrib.auth.backends.ModelBackend',
+
+   
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+   
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+
+
+
+}
+
+
+CORS_ALLOW_ALL_ORIGINS=True
+
 
 WSGI_APPLICATION = 'fbcool.wsgi.application'
 
@@ -138,3 +184,4 @@ MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'post-List'
 LOGOUT_REDIRECT_URL = 'post-List'
+SITE_ID = 1

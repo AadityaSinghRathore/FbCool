@@ -40,6 +40,11 @@ urlpatterns = [
    
    path('like/<int:pk>',LikeView,name='post-like'),
    path('ajax/validate_username', validate_username, name='validate_username'),
+
+   path('oauth/', include('social_django.urls', namespace='social')), 
+   path('accounts/', include('allauth.urls')),
+   path('api-auth/', include('rest_framework.urls')),
+   path('post_data/',include('authentication.urls', namespace='post'), ),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

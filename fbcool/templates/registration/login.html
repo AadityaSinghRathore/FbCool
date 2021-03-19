@@ -1,4 +1,5 @@
-
+{% load socialaccount %}
+{% providers_media_js %}
 
 
 {% block title %}Login{% endblock %}
@@ -15,6 +16,8 @@
   {{ form.as_p }}
   <button type="submit">Log In</button>
     <p><a href="{% url 'signup' %}"><input type="button" value="SignUp" ></a></p>
+    <button><a href="#">google Login</a></button>
+    <button><a href="{% provider_login_url "facebook" method="oauth2" %}">facebook login</a></button>
 </form>
 {% endblock %}
 

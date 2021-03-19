@@ -74,6 +74,7 @@ $(document).ready(function () {
                 processData: false,
                 success: function(data) {
                     if (data.form_is_valid) {
+                        debugger
                         $('#createpost').modal('hide')
                         $(".container1").html(data.html_admin_user_list);
                     } else {
