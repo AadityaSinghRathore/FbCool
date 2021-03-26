@@ -1,14 +1,12 @@
-from django.shortcuts import render,redirect,get_object_or_404
+
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect,reverse,get_object_or_404
 from .forms import PostForm,CommentForm
 # Create your views here.   
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.urls import reverse_lazy,reverse
 from django.views import generic
-from django.views.generic import ListView,DetailView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView  
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView  ,FormView
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import FormView 
-
 from django.views.generic.base import TemplateView
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -17,14 +15,87 @@ from django.template import RequestContext
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import PostSerializer
+from .serializers import PostSerializer,LoginSerializer,ShowUserSerializer
 from . models import Post,Comment
 from rest_framework.permissions import IsAuthenticated , AllowAny, IsAdminUser
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.views import APIView
+from rest_framework import generics
+from django.contrib.auth import authenticate, login
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from . import utils
+from .serializers import RegisterSerializer
+
+
+
+
+class RegisterView(generics.CreateAPIView):
+
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+    def post(self, request):
+      
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data" : serializer.data, "message":'success', "status_code": status.HTTP_200_OK }, status=status.HTTP_200_OK)
+        return Response({"message":serializer.errors, "status_code": status.HTTP_400_BAD_REQUEST }, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PostViewSet(viewsets.ModelViewSet):
+    
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [AllowAny]  
+    permission_classes = [IsAuthenticated]  
+    authentication_classes = [BasicAuthentication,TokenAuthentication]
+
+
+class LoginView(generics.GenericAPIView):
+
+    serializer_class= LoginSerializer
+    queryset=User.objects.all()   
+    permission_classes = [AllowAny] 
+    
+
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        try:
+            
+            user = User.objects.get(username__iexact=serializer.validated_data['username'].lower())
+        except:
+            
+            return Response(data={'detail' : 'user does not exist!'}, status=status.HTTP_404_NOT_FOUND)
+        password = serializer.validated_data['password']
+        
+        user = authenticate(username=user.username, password=password)
+        if user is not None and (user.is_active == True ):
+            if user.is_authenticated:
+                utils.login_user(request, user)
+                serializer = ShowUserSerializer(user)
+
+                return Response(data=serializer.data, status=status.HTTP_200_OK )
+            return Response(data={'detail': 'Unable to log in with provided credentials.'}, status=status.HTTP_401_UNAUTHORIZED)      
+        return Response(data={'detail': 'Unable to log in with provided credentials.',"statusCode":200}, status=status.HTTP_401_UNAUTHORIZED)
+
+        
+
+class ExampleView(APIView):
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        content = {
+           # None
+             
+            'message': 'Hello, World!', 
+        }
+        return Response(content)
 
 
 
@@ -58,27 +129,7 @@ class SignUpView(generic.CreateView):
     
     success_url = reverse_lazy('login')
    
-
-
-# class PostCreateView(CreateView):
-    
-#     form_class = PostForm
-    
-#     model = Post
-    
-#     template_name='registration/newPost.html'
-   
-#     success_url='home.html'
-
-    
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user
-#         form.save()
-        
-#         #return render(request, "home.html")
-#        # return super(post-Create, self).form_valid(form)
-#         return redirect('/postlist/')
-#     
+     
 class PostCreateView(CreateView):
 
     model = Post
@@ -92,6 +143,7 @@ class PostCreateView(CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
+
 
         extra_context = {} 
         form = self.form_class(request.POST,request.FILES)
