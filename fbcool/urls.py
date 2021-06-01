@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.views.generic.base import TemplateView
-from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,CommentCreateView,PostDetail,LikeView ,validate_username
+from authentication.views import PostListView,PostCreateView,SignUpView,PostUpdateView,PostDeleteView,CommentCreateView,PostDetail,LikeView ,validate_username,ProfileUpdateView
 from django.conf.urls.static import static
 
 from django.conf import settings
@@ -33,6 +33,8 @@ urlpatterns = [
     
     path('post/list/post/Create/',PostCreateView.as_view(),name= "post-Create"),
 
+    path('profile/update/<int:pk>',ProfileUpdateView.as_view(),name= "profile-update"),
+
     path('post/delete/<int:pk>',PostDeleteView.as_view(),name= "post-delete"),
     path('post/update/<int:pk>',PostUpdateView.as_view(),name= "post-update"),
     path('comment/create/', CommentCreateView.as_view(),name= "post-comment"),
@@ -45,6 +47,7 @@ urlpatterns = [
    path('accounts/', include('allauth.urls')),
    path('api-auth/', include('rest_framework.urls')),
    path('post_data/',include('authentication.urls', namespace='post'), ),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

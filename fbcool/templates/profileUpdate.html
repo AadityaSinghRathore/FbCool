@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin my-5">
+        <div class="card-body">
+          <h5 class="card-title text-center"><b>Update Profile</b></h5>
+          <h3> {{ message }} </h3>
+
+
+            current user :{{user.id}}
+
+              {% if user.is_authenticated %}
+               
+                    <h1>you can edit {{ user.username }}!</h1>
+                       <h1>Edit Post</h1>
+                       
+                    <form action="{% url 'profile-update' pk=user.pk %}"  method='post'class="form delete_post_form" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        {{form.as_p}}
+
+                        <div class="modal-footer">
+                              <button type="submit" class="post_submit_button" style="cursor: pointer;"  data-target="#createpost">Post</button>
+                              
+                              <a href="{% url 'post-List'   %}" type="submit">back</a>
+                           
+
+                        </div>
+                    </form>
+                {% else %}
+                <p>You are not user get lost otherwise you will  get mudrus</p>
+                {% endif %}                 
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal footer -->
+
+          
+{% endblock %}

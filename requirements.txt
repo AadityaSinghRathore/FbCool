@@ -2,3 +2,13 @@ Django
 python-decouple
 psycopg2-binary
 Unipath==1.1
+django-crispy-forms
+djangorestframework
+django-filter
+django-rest-knox
+django-allauth
+requests
+django-cors-headers
+drf-yasg
+pillow
+django-jazzmin==2.4.5

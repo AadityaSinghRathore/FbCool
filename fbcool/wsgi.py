@@ -12,5 +12,9 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fbcool.settings')
+# # Development
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'fbcool.settings.dev'
+# # Production
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'fbcool.settings.production'
 
 application = get_wsgi_application()

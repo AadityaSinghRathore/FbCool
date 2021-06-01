@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect,reverse,get_object_or_404
-from .forms import PostForm,CommentForm
+from .forms import PostForm,CommentForm,UserForm
 # Create your views here.   
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.urls import reverse_lazy,reverse
@@ -107,6 +107,7 @@ def validate_username(request):
     }
     return JsonResponse(data)
 
+
 def LikeView(request,pk):
 
     post=get_object_or_404(Post, id=request.POST.get('post_id'))
@@ -203,8 +204,9 @@ class PostListView(ListView):
     
     model= Post
     template_name = 'home.html'
-    odering =['post_date'] 
-  
+    paginate_by = 10
+    odering =['post_date']  
+
 class PostUpdateView(UpdateView):
    
     model=Post
@@ -252,5 +254,8 @@ class PostDetail(DetailView):
             context['liked'] = liked   
          return  context  
 
-
-
+class ProfileUpdateView(UpdateView):
+    model = User
+    template_name = "profileUpdate.html"
+    form_class = UserForm
+    success_url='/post/list/'     

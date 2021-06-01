@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
 
+    'crispy_forms',
 
 ]
 
@@ -106,6 +107,7 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
+    
    
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
@@ -190,3 +192,4 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = 'post-List'
 LOGOUT_REDIRECT_URL = 'post-List'
 SITE_ID = 1
+CRISPY_TEMPLATE_PACK = 'bootstrap4'   # using crispy form bootstrap 4

@@ -1,8 +1,11 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load socialaccount %}
 {% providers_media_js %}
 
 
 {% block title %}Login{% endblock %}
+ {% comment %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,4 +25,39 @@
 {% endblock %}
 
 </body>
-</html>
+</html> #}
+{% endcomment %}
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center"><b>Log In Here</b></h5>
+           <h3> {{ message }} </h3>
+            <form class="form-signin" method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group"><br>
+                {{ form | crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Log In</button><br>
+            </div>
+
+            </form>
+            <div class="form-group">
+                <a href="{% url 'signup' %}"> <button  class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">signup</button></a><br>
+
+            </div>
+            <div class="form-group">
+             <button class="btn btn-lg btn-primary btn-block text-uppercase" color='black' ><a href="#">google Login</a></button>
+            </div>
+            <div>
+            <button class="btn btn-lg btn-primary btn-block text-uppercase"><a href="{% provider_login_url "facebook" method="oauth2" %}">facebook login</a></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
